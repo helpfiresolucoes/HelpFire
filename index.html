@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Help Fire – Tutoria Interativo CBMSC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1f2933 0, #06080d 50%, #020308 100%);
+      color: #f9fafb;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+      font-size: 15px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1400px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      padding: 24px 32px 32px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    header {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 0.85rem;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge span {
+      font-size: 1.1rem;
+    }
+
+    /* Marca Help Fire */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 4px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    .brand-text h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+    }
+
+    .brand-text p {
+      font-size: 1rem;
+      color: #cbd5f5;
+      max-width: 560px;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .contact-tag {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+      text-align: right;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #e5e7eb;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title span {
+      font-size: 1.25rem;
+    }
+
+    /* Seletor de serviços */
+    .service-picker {
+      margin-bottom: 12px;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .service-card {
+      background: linear-gradient(145deg, #020617, #020617);
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      cursor: pointer;
+      transition: all 0.16s ease-out;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 120px;
+    }
+
+    .service-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+      border-color: #22c55e;
+    }
+
+    .service-card.selected {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.6);
+    }
+
+    .service-icon {
+      font-size: 1.5rem;
+    }
+
+    .service-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+
+    .chip {
+      margin-top: 4px;
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(15, 118, 110, 0.3);
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: #a5f3fc;
+    }
+
+    /* Introdução */
+    .intro {
+      margin-top: 16px;
+      margin-bottom: 10px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #e5e7eb;
+    }
+
+    .intro p + p {
+      margin-top: 8px;
+    }
+
+    /* Tutorial */
+    .tutorial {
+      margin-top: 12px;
+      padding: 16px 16px 18px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top left, #0f172a 0, #020617 55%);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      display: none;
+    }
+
+    .tutorial.visible {
+      display: block;
+    }
+
+    .tutorial-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+
+    .tutorial-header-main {
+      max-width: 640px;
+    }
+
+    .tutorial-header h2 {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    .tutorial-header p {
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+
+    .tutorial-tags {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.8rem;
+      min-width: 220px;
+    }
+
+    .tag-line {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .pill-label {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .pill-value {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Barra de progresso / passo */
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .step-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .step-counter {
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(30, 64, 175, 0.4);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #06b6d4);
+      transition: width 0.2s ease-out;
+    }
+
+    .step-body {
+      font-size: 0.95rem;
+      color: #e5e7eb;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      white-space: pre-line;
+    }
+
+    .step-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 8px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease-out;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(34, 197, 94, 0.45);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Resumo / assessoria */
+    .summary {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.3fr);
+      gap: 14px;
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px dashed rgba(148, 163, 184, 0.5);
+    }
+
+    .summary h3 {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .summary p {
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+
+    .summary ul {
+      margin-left: 18px;
+      margin-top: 4px;
+      font-size: 0.9rem;
+    }
+
+    .assist-box {
+      background: radial-gradient(circle at top, rgba(34, 197, 94, 0.22), transparent 60%);
+      border-radius: 14px;
+      padding: 12px;
+      border: 1.5px solid rgba(34, 197, 94, 0.9);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.25);
+    }
+
+    .assist-box strong {
+      font-size: 1rem;
+    }
+
+    .assist-box small {
+      font-size: 0.8rem;
+      color: #a7f3d0;
+    }
+
+    .assist-price {
+      font-size: 0.9rem;
+      color: #bbf7d0;
+    }
+
+    /* Subcards (Outros serviços) */
+    .sub-card {
+      border-radius: 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      margin-bottom: 10px;
+    }
+
+    .sub-card-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+    }
+
+    .sub-card-body {
+      font-size: 0.9rem;
+      color: #d1d5db;
+      white-space: pre-line;
+    }
+
+    @media (max-width: 1100px) {
+      .service-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .header-right {
+        align-items: flex-start;
+      }
+
+      .contact-tag {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .service-grid {
+        grid-template-columns: 1fr;
+      }
+      .app {
+        padding: 16px 14px 22px;
+      }
+      .summary {
+        grid-template-columns: 1fr;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .tutorial-header {
+        flex-direction: column;
+      }
+      body {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <img src="help-fire-logo.jpeg" alt="Help Fire Consulting" class="logo" />
+        <div class="brand-text">
+          <h1>Help Fire – Tutoria Interativo CBMSC</h1>
+          <p>Selecione o tipo de serviço e siga o passo a passo. No final você pode optar por fazer sozinho ou contratar assessoria com a Help Fire.</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="badge"><span>⚡</span> Guia rápido e simplificado</div>
+        <div class="contact-tag">
+          <div>📱 WhatsApp: <strong>(47) 92003-5024</strong></div>
+          <div>✉️ E-mail: <strong>helpfiresolucoes@gmail.com</strong></div>
+        </div>
+      </div>
+    </header>
+
+    <section class="service-picker">
+      <div class="section-title">
+        <span>🧩</span> O que você precisa fazer?
+      </div>
+      <div class="service-grid">
+        <div class="service-card" data-service="cadastro">
+          <div class="service-icon">🧾</div>
+          <div class="service-title">Cadastro no e-SCI e documentos básicos</div>
+          <div class="service-desc">Entenda PPCI/RPCI, Habite-se e Funcionamento, crie seu acesso no e-SCI, cadastre o endereço (RE) e faça o primeiro vínculo.</div>
+          <div class="chip">Ponto de partida recomendado</div>
+        </div>
+        <div class="service-card" data-service="projeto">
+          <div class="service-icon">📐</div>
+          <div class="service-title">PPCI / RPCI – Projeto Preventivo</div>
+          <div class="service-desc">Solicitar análise de projeto preventivo (novo, alteração ou substituição) para construção, reforma ou ampliação.</div>
+          <div class="chip">Requer cadastro, RE e vínculo prontos</div>
+        </div>
+        <div class="service-card" data-service="habite">
+          <div class="service-icon">🏠</div>
+          <div class="service-title">Habite-se (CBMSC)</div>
+          <div class="service-desc">Solicitação de Habite-se do CBMSC após conclusão da obra e aprovação do PPCI/RPCI.</div>
+          <div class="chip">Usado para ocupação e prefeitura</div>
+        </div>
+        <div class="service-card" data-service="funcionamento">
+          <div class="service-icon">🏢</div>
+          <div class="service-title">Atestado de Funcionamento</div>
+          <div class="service-desc">Solicitação, renovação e retirada do Atestado de Funcionamento, inclusive em casos de regularização e baixo risco.</div>
+          <div class="chip">Pode ser solicitado mesmo sem PPCI/Habite-se</div>
+        </div>
+        <div class="service-card" data-service="migracao">
+          <div class="service-icon">🔄</div>
+          <div class="service-title">Migração de documentos – Bombeiros Voluntários</div>
+          <div class="service-desc">Importação de PPCI/RPCI e Habite-se aprovados por Bombeiros Voluntários para o sistema e-SCI do CBMSC.</div>
+          <div class="chip">Apenas cidades com BV conveniado (ex.: CBVJ)</div>
+        </div>
+        <div class="service-card" data-service="outros">
+          <div class="service-icon">📁</div>
+          <div class="service-title">Outros serviços</div>
+          <div class="service-desc">Exclusão de protocolo, restituição de taxa, prorrogação de AF, recurso, lotação, cumprimento de pendência.</div>
+          <div class="chip">Casos específicos / apoio fino</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro" id="intro">
+      <p><strong>O que é esta página?</strong> Este tutoria interativo foi criado para ajudar você a entender e solicitar, passo a passo, os principais serviços de segurança contra incêndio e pânico junto ao CBMSC, utilizando o sistema e-SCI.</p>
+      <p>Você pode seguir o passo a passo gratuitamente, por conta própria. Caso prefira, a Help Fire oferece um serviço opcional de assessoria: analisamos o seu caso, ajudamos a definir qual documento é adequado (PPCI/RPCI, Habite-se, Atestado de Funcionamento, migração de documentos etc.) e organizamos toda a documentação necessária.</p>
+      <p><strong>Serviço de assessoria:</strong> além de orientar, também podemos realizar as solicitações diretamente no e-SCI em seu nome, mediante envio prévio da documentação necessária e observados os requisitos da legislação vigente.</p>
+    </section>
+
+    <section class="tutorial" id="tutorial">
+      <div class="tutorial-header">
+        <div class="tutorial-header-main">
+          <h2 id="serviceName">Serviço selecionado</h2>
+          <p id="serviceDescription">Descrição do serviço.</p>
+        </div>
+        <div class="tutorial-tags">
+          <div class="tag-line">
+            <div class="pill">
+              <span class="pill-label">Taxa prevista</span>
+              <span class="pill-value" id="serviceFee">—</span>
+            </div>
+          </div>
+          <div class="tag-line">
+            <div class="pill">
+              <span class="pill-label">Dificuldade estimada</span>
+              <span class="pill-value" id="serviceDifficulty">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-header">
+        <div class="step-title" id="stepTitle">Passo 1</div>
+        <div class="step-counter" id="stepCounter">Passo 1 de 1</div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+      <div class="step-body" id="stepBody">
+        Selecione um serviço para começar.
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-ghost" id="prevStepBtn" disabled>
+          ← Voltar
+        </button>
+        <button class="btn btn-primary" id="nextStepBtn">
+          Próximo passo →
+        </button>
+      </div>
+
+      <div class="summary">
+        <div>
+          <h3>📌 Documentos geralmente necessários</h3>
+          <p id="docsIntro">Verifique se você possui os documentos abaixo (podem variar conforme o caso):</p>
+          <ul id="docsList">
+            <!-- preenchido via JS -->
+          </ul>
+        </div>
+        <div>
+          <div class="assist-box">
+            <strong>💼 Quer ajuda em todo o processo?</strong>
+            <p class="assist-price" id="assistInfo">Oferecemos assessoria especializada para este tipo de serviço.</p>
+            <small>Você envia os dados básicos e a documentação necessária; nós organizamos o pedido, conferimos as exigências e, se desejar, realizamos as solicitações diretamente no e-SCI e acompanhamos até a conclusão.</small>
+            <button class="btn btn-primary" id="assistBtn">
+              Solicitar assessoria no WhatsApp
+            </button>
+            <small>Você pode decidir depois: continue vendo o passo a passo normalmente.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Configuração dos serviços e passos
+    const services = {
+      cadastro: {
+        nome: "Cadastro no e-SCI e documentos básicos",
+        descricao: "Primeiro contato com o sistema e-SCI: entender PPCI/RPCI, Habite-se e Funcionamento no âmbito do CBMSC, criar seu acesso, cadastrar o endereço (RE) e vincular a edificação ao seu CPF.",
+        taxa: "Sem taxa para cadastro; as taxas aparecem ao solicitar PPCI, Habite-se ou Funcionamento",
+        dificuldade: "Baixa",
+        assessoria: "Podemos te ajudar a entender qual documento você realmente precisa (PPCI, Habite-se ou Funcionamento), organizar os documentos e, se preferir, efetuar o primeiro cadastro, criação de RE e vínculo diretamente no e-SCI a partir da documentação enviada.",
+        docs: [
+          "CPF e dados pessoais básicos",
+          "E-mail válido e de acesso fácil (para receber o link de ativação)",
+          "Dados do imóvel (endereço completo e cidade)",
+          "Algum documento que comprove o vínculo com o imóvel, quando for fazer o vínculo (escritura, contrato de locação, contrato social ou similar)"
+        ],
+        passos: [
+          {
+            titulo: "Entender os três documentos principais no CBMSC: PPCI/RPCI, Habite-se e Funcionamento",
+            corpo: "Antes de mexer no sistema, é importante saber que, no âmbito do CBMSC:\n\n• PPCI/RPCI é o projeto preventivo contra incêndio e pânico analisado e aprovado pelo Corpo de Bombeiros, normalmente antes ou durante a construção, reforma ou ampliação.\n\n• Habite-se (Atestado de Habite-se do CBMSC) é o documento que atesta que a edificação foi executada conforme o projeto aprovado e que está apta para ser ocupada. Muitas prefeituras utilizam esse documento como base para o Habite-se municipal.\n\n• Funcionamento (Atestado de Funcionamento) é o documento vinculado à atividade em funcionamento (empresa, comércio, serviço etc.), normalmente associado à vistoria e à manutenção das condições de segurança ao longo do tempo."
+          },
+          {
+            titulo: "Criar seu acesso no e-SCI",
+            corpo: "Acesse o site esci.cbm.sc.gov.br e clique em 'Primeiro acesso'. Preencha seu CPF, dados pessoais e e-mail, crie uma senha e finalize o cadastro. Em seguida, acesse o e-mail informado e clique no link de ativação para habilitar o usuário antes de tentar entrar no sistema."
+          },
+          {
+            titulo: "Localizar ou cadastrar o Registro de Endereço (RE)",
+            corpo: "Depois de entrar no e-SCI, vá em MINHAS EDIFICAÇÕES e clique em 'Consultar ou cadastrar um novo registro de endereço (RE)'. Pesquise pelo logradouro e cidade. Se encontrar o endereço da edificação, selecione-o. Se não houver RE cadastrado para aquele endereço, crie um novo preenchendo corretamente os dados do imóvel."
+          },
+          {
+            titulo: "Vincular seu CPF ao RE da edificação",
+            corpo: "Com o RE localizado ou criado, volte em MINHAS EDIFICAÇÕES, clique em 'Nova solicitação' e selecione o endereço. Se o sistema avisar que você não está vinculado, siga o fluxo de vínculo: escolha o tipo de vínculo (proprietário, responsável técnico, solicitante etc.) e anexe um documento que comprove essa relação (escritura, contrato de locação, contrato social, contrato de prestação de serviços, entre outros). Após o vínculo ser aceito, você poderá solicitar PPCI, Habite-se, Funcionamento e outros serviços para essa edificação."
+          }
+        ]
+      },
+      projeto: {
+        nome: "PPCI / RPCI – Projeto Preventivo",
+        descricao: "Fluxo para solicitar análise de projeto preventivo (novo, alteração ou substituição) no sistema e-SCI, conforme IN 1/DSCI/CBMSC.",
+        taxa: "Depende da área construída e tabela de taxas do CBMSC (processo simplificado ou ordinário)",
+        dificuldade: "Média a Alta",
+        assessoria: "Na assessoria, conferimos o enquadramento, ajudamos no preenchimento do questionário de complexidade, organizamos os anexos da IN 1, revisamos as plantas e, quando autorizado, também protocolamos a solicitação no e-SCI com base na documentação enviada, acompanhando até a emissão do atestado.",
+        docs: [
+          "Acesso ativo no sistema e-SCI (cadastro com CPF e senha)",
+          "Dados completos do imóvel (endereço, cidade, matrícula ou escritura, quando houver)",
+          "Registro de Endereço (RE) criado ou localizado no e-SCI",
+          "Comprovação de vínculo com o imóvel (proprietário, empresa ou responsável técnico)",
+          "Projeto arquitetônico/planta baixa atualizada da edificação",
+          "Dados e documentos do responsável técnico (ART/RRT) quando exigido",
+          "Documentos do proprietário/empresa (contrato social, CNPJ, RG/CPF)",
+          "Anexos exigidos pela IN 1/DSCI/CBMSC preenchidos e assinados digitalmente",
+          "Comprovante de pagamento da taxa, quando gerada"
+        ],
+        passos: [
+          {
+            titulo: "Confirmar se cadastro, RE e vínculo estão prontos",
+            corpo: "Antes de abrir o PPCI/RPCI, confira se você já concluiu: (1) cadastro no e-SCI com CPF e senha; (2) criação ou localização do RE da edificação; (3) vínculo do seu CPF com o endereço. Se ainda não fez essas etapas, utilize primeiro o card 'Cadastro no e-SCI e documentos básicos'."
+          },
+          {
+            titulo: "Escolher se é novo PPCI, alteração ou substituição",
+            corpo: "Na Área do Cliente, acesse 'ANÁLISE DE PPCI E RPCI', selecione a edificação (RE) e, se houver mais de um, o bloco correspondente. Se não existir projeto anterior, escolha 'Nova solicitação de PPCI/RPCI'. Se já existe um projeto aprovado e houve mudança de layout, ampliação ou ajustes, use 'Alterar projeto'. Se o projeto será totalmente substituído por outro, use 'Substituir projeto'."
+          },
+          {
+            titulo: "Responder o questionário de complexidade e dados da edificação",
+            corpo: "Preencha o enquadramento de complexidade com as informações reais: ocupação principal da edificação, área total e comum, altura, lotação, quantidade de pavimentos, quantidade de gás e demais dados solicitados. O resultado desse questionário define se o processo será simplificado ou ordinário e orienta quais medidas de segurança contra incêndio serão exigidas."
+          },
+          {
+            titulo: "Preparar e anexar toda a documentação exigida",
+            corpo: "Com o enquadramento preenchido, anexe as plantas, memoriais, ART/RRT, anexos da IN 1 e demais documentos obrigatórios. Prefira arquivos em PDF e, quando houver assinatura exigida (proprietário, responsável técnico, etc.), utilize assinatura digital válida. Revise se não existe campo em vermelho nem documento faltando antes de prosseguir."
+          },
+          {
+            titulo: "Gerar a taxa, pagar e acompanhar a análise",
+            corpo: "Ao confirmar o envio, o sistema gera o comprovante da solicitação e a guia de taxa correspondente. Efetue o pagamento e aguarde a compensação, que costuma ocorrer em até 24 horas. Depois disso, inicia-se o prazo de análise: em regra, até 5 dias úteis para processos simplificados e até 20 dias úteis para processos ordinários, podendo haver exigências de complementação."
+          },
+          {
+            titulo: "Baixar o atestado de construção, reforma ou ampliação",
+            corpo: "Com o PPCI/RPCI aprovado, acesse novamente 'ANÁLISE DE PPCI E RPCI', selecione o RE e consulte o processo. No campo de anexos ou resultados, ficará disponível o atestado de construção, reforma ou ampliação, que você poderá baixar e utilizar junto à prefeitura, cartório, instituições financeiras ou outros órgãos que exigirem o documento."
+          }
+        ]
+      },
+      habite: {
+        nome: "Habite-se (CBMSC)",
+        descricao: "Solicitação do documento de Habite-se emitido pelo CBMSC, normalmente após a conclusão da obra e aprovação do PPCI/RPCI.",
+        taxa: "Taxa de análise/emissão conforme área e tabela de taxas do CBMSC",
+        dificuldade: "Média",
+        assessoria: "Na assessoria, conferimos se o PPCI/RPCI está em dia, orientamos sobre a vistoria de conclusão quando necessária, preparamos os anexos exigidos e, se desejado, realizamos a solicitação de Habite-se diretamente no e-SCI com a documentação enviada, acompanhando até a emissão do atestado.",
+        docs: [
+          "Cadastro no e-SCI, RE e vínculo regularizados",
+          "PPCI/RPCI aprovado para a edificação",
+          "Atestados vinculados ao PPCI (construção/reforma/ampliação), quando emitidos",
+          "Anexo I e Anexo J da IN 1/DSCI/CBMSC, preenchidos e assinados digitalmente, quando aplicável",
+          "Comprovação da conclusão da obra conforme projeto aprovado",
+          "Dados do proprietário e, se houver, da empresa interessada",
+          "Comprovante de pagamento da taxa específica para Habite-se, quando gerada"
+        ],
+        passos: [
+          {
+            titulo: "Confirmar PPCI/RPCI aprovado e situação da obra",
+            corpo: "Verifique no e-SCI se o PPCI/RPCI da edificação está aprovado e se não existem exigências pendentes. Confirme também se a obra foi executada conforme o projeto aprovado (medidas de segurança, rotas de fuga, compartimentação, etc.), pois o Habite-se depende dessa conformidade."
+          },
+          {
+            titulo: "Acessar o menu 'VISTORIA PARA HABITE-SE' e escolher o RE",
+            corpo: "Após acessar o e-SCI com seu usuário, vá até a ÁREA DO CLIENTE e clique em 'VISTORIA PARA HABITE-SE'. Em seguida, localize a edificação desejada em MINHAS EDIFICAÇÕES (RE) e clique na seta na parte inferior do cartão do RE para prosseguir."
+          },
+          {
+            titulo: "Selecionar o projeto deferido e iniciar a solicitação de Habite-se",
+            corpo: "Na tela de SOLICITAÇÃO DE HABITE-SE, selecione a opção 'Habite-se para o projeto deferido, protocolo ...' correspondente ao PPCI/RPCI aprovado e clique em 'Solicitar Habite-se'. Se abrir uma tela de FAQ ou resumo, leia as orientações e, se preferir, feche para continuar o preenchimento."
+          },
+          {
+            titulo: "Definir o pagador do boleto, anexar documentos (incluindo Anexo I e Anexo J) e aceitar os termos",
+            corpo: "Na etapa seguinte, selecione quem será o pagador do boleto. Avance até a aba ANEXOS, anexe todos os documentos exigidos (incluindo, quando aplicável, o Anexo I e o Anexo J da IN 1/DSCI/CBMSC, preferencialmente com assinatura digital) e clique em 'Prosseguir'. Leia a mensagem exibida e marque a opção indicando que leu e concorda com os termos de responsabilidade antes de finalizar."
+          },
+          {
+            titulo: "Conferir o protocolo, pagar a taxa e acompanhar o prazo",
+            corpo: "Após confirmar a solicitação, o sistema exibirá o comprovante de protocolo e a guia da taxa para pagamento. Em alguns casos, é necessário aguardar até 24 horas para efetuar o pagamento. Os prazos de tramitação contam a partir do pagamento da taxa e da apresentação completa dos documentos, sendo em regra de 5 dias úteis para processo simplificado e 20 dias úteis para processo ordinário."
+          },
+          {
+            titulo: "Baixar o Atestado de Habite-se no e-SCI",
+            corpo: "Depois de deferido o Habite-se (automaticamente em alguns casos de RPCI ou após análise, quando houver vistoria), acesse novamente MINHAS EDIFICAÇÕES, selecione o RE e entre em SOLICITAÇÕES E ACOMPANHAMENTO DE PROTOCOLOS > SOLICITAÇÕES E PROTOCOLOS DE HABITE-SE > RESULTADOS. Localize o protocolo desejado e faça o download do Atestado de Habite-se emitido pelo CBMSC."
+          }
+        ]
+      },
+      funcionamento: {
+        nome: "Atestado de Funcionamento",
+        descricao: "Solicitação, renovação, retorno e retirada do Atestado de Funcionamento da atividade junto ao CBMSC, inclusive em casos de regularização, baixo risco e situações isentas de atestado.",
+        taxa: "Taxa de funcionamento/vistoria conforme metragem, uso e tabela de taxas do CBMSC",
+        dificuldade: "Média",
+        assessoria: "Na assessoria, fazemos checklist pré-vistoria, conferimos a documentação, orientamos sobre eventuais adequações e, se o cliente preferir, protocolamos a solicitação ou renovação do Atestado de Funcionamento no e-SCI com base nos documentos enviados, inclusive em cenários de regularização e baixo risco.",
+        docs: [
+          "Dados do imóvel e da atividade (endereço, CNPJ, razão social ou nome fantasia)",
+          "Cadastro no e-SCI, RE e vínculo já regularizados",
+          "Quando houver, PPCI/RPCI aprovado e atestado correspondente (para ocupações em situação regular)",
+          "Último Atestado de Funcionamento emitido (para renovação, quando existir)",
+          "Comprovantes de manutenção de extintores e sistemas de segurança (quando aplicável)",
+          "Documentos utilizados para comprovar enquadramento em baixo risco JUCESC ou casos de Risco I isentos de atestado, quando for o caso",
+          "Comprovante da taxa de funcionamento/vistoria, quando gerada"
+        ],
+        passos: [
+          {
+            titulo: "Identificar o tipo de situação: primeira solicitação, renovação, retorno ou baixo risco",
+            corpo: "Antes de iniciar o preenchimento, identifique em qual cenário você se enquadra:\n\n• Primeira solicitação de Atestado de Funcionamento para uma atividade ainda sem AF anterior.\n• Renovação de Atestado de Funcionamento já existente.\n• Retorno de vistoria (quando houve vistoria com pendências e é necessário registrar retorno).\n• Situações de baixo risco JUCESC ou casos de Risco I isentos de Atestado, em que a regularização segue fluxo diferenciado e nem sempre gera AF no e-SCI."
+          },
+          {
+            titulo: "Acessar o menu FUNCIONAMENTO / MINHAS EMPRESAS no e-SCI",
+            corpo: "Acesse o e-SCI com seu usuário, conclua a ciência de eventuais alertas e clique em ÁREA DO CLIENTE. Em seguida, acesse o módulo FUNCIONAMENTO / MINHAS EMPRESAS. Ali serão exibidas as empresas/atividades já cadastradas para os RE vinculados ao seu CPF e será possível abrir nova solicitação, renovação ou retorno de vistoria."
+          },
+          {
+            titulo: "Solicitar ou renovar o Atestado de Funcionamento",
+            corpo: "Selecione a empresa/atividade desejada e utilize a opção correspondente:\n\n• Nova solicitação de funcionamento (primeira emissão).\n• Renovar funcionamento (quando já existe AF anterior).\n• Retorno de vistoria (quando houve vistoria com pendências e é necessário registrar retorno).\n\nPreencha atentamente os dados da atividade (área utilizada, horários, CNAE, lotação, uso dos pavimentos, entre outros) e as informações solicitadas para a área específica, conforme o tipo de ocupação."
+          },
+          {
+            titulo: "Casos de baixo risco JUCESC e Risco I isentos de Atestado",
+            corpo: "Para empresas enquadradas em baixo risco junto à JUCESC, bem como atividades classificadas como Risco I isentas de Atestado de Funcionamento, verifique as orientações específicas: em muitos casos, a regularização é feita diretamente via Junta Comercial e/ou prefeitura, sem emissão de AF pelo e-SCI. Ainda assim, é importante guardar o comprovante de enquadramento e manter as condições mínimas de segurança previstas na legislação estadual."
+          },
+          {
+            titulo: "Gerar a taxa, efetuar o pagamento e acompanhar vistoria (quando aplicável)",
+            corpo: "Após conferir os dados, gere a guia de taxa de funcionamento/vistoria e efetue o pagamento dentro do prazo informado. Guarde o comprovante. Quando houver necessidade de vistoria, acompanhe pelo sistema a data prevista e prepare o local (acesso, responsável presente, documentação). Nos casos em que forem registradas pendências em Auto de Fiscalização (AF), utilize as funções de 'Informar cumprimento da pendência', 'Solicitar prorrogação' ou 'Recurso', conforme o caso, sempre pelo menu MEUS AUTOS DE FISCALIZAÇÃO E DE INFRAÇÃO."
+          },
+          {
+            titulo: "Retirar ou baixar o Atestado de Funcionamento",
+            corpo: "Após o deferimento do pedido e a conclusão de eventuais vistorias, acesse novamente o módulo FUNCIONAMENTO / MINHAS EMPRESAS e utilize as opções de retirada/baixar atestado para salvar o documento em PDF. Guarde o arquivo e, se necessário, entregue cópia para órgãos que exigirem a comprovação (prefeitura, vigilância sanitária, órgãos licenciadores, instituições financeiras, etc.)."
+          }
+        ]
+      },
+      migracao: {
+        nome: "Migração de documentos – Bombeiros Voluntários",
+        descricao: "Importação, para o e-SCI do CBMSC, de PPCI/RPCI e Habite-se já aprovados por Corpo de Bombeiros Voluntários conveniados (ex.: CBVJ). Válido apenas para cidades atendidas por BV conveniado.",
+        taxa: "Em regra, gera taxa no sistema, mas com possibilidade de isenção específica (por ofício) conforme orientação do CBMSC",
+        dificuldade: "Média",
+        assessoria: "Na assessoria, verificamos se o seu caso se enquadra na migração CBVJ/CBMSC, conferimos os documentos emitidos pelos Bombeiros Voluntários, orientamos sobre o cadastro no e-SCI (RE, bloco, vínculo) e preparamos a solicitação de importação de PPCI/RPCI e/ou Habite-se, incluindo o ofício de isenção de taxa quando cabível.",
+        docs: [
+          "Acesso ao e-SCI (cadastro com CPF e senha) e RE/vínculo da edificação regularizados",
+          "PPCI/RPCI ou RPCI aprovado pelo Corpo de Bombeiros Voluntário (por exemplo, CBVJ)",
+          "Atestado de aprovação emitido pelo Bombeiro Voluntário, quando houver",
+          "Documentos de responsabilidade técnica (ART/RRT) com a mesma área do projeto aprovado, especialmente para áreas acima de 200 m²",
+          "Memorial de cálculo e demais peças técnicas para edificações acima de 750 m², quando exigido",
+          "Para Habite-se: atestado de aprovação de Habite-se do Bombeiro Voluntário ou documento equivalente (ex.: Conclusão de Obras com carimbo do BV) e documento de responsabilidade técnica pela execução",
+          "Dados completos da edificação (endereço, área total, altura, uso) e, se houver, número do protocolo do projeto aprovado pelo Bombeiro Voluntário",
+          "Minuta de ofício solicitando isenção de taxa, com dados do solicitante e do protocolo a ser migrado"
+        ],
+        passos: [
+          {
+            titulo: "Confirmar se sua cidade é atendida por Bombeiro Voluntário conveniado ao CBMSC",
+            corpo: "A migração de documentos de Bombeiros Voluntários (como o CBVJ) para o CBMSC aplica-se apenas a cidades catarinenses atendidas por Corpo de Bombeiros Voluntário conveniado. Verifique junto ao CBMSC ou à unidade local se o seu município está nessa situação antes de iniciar o processo de importação."
+          },
+          {
+            titulo: "Escolher a trilha de migração: apenas PPCI/RPCI, apenas Habite-se ou ambos",
+            corpo: "Organize seus documentos do Bombeiro Voluntário e escolha qual trilha se aplica ao seu caso:\n\n• Apenas PPCI/RPCI: você tem um projeto preventivo aprovado pelo BV e deseja importá-lo para o e-SCI do CBMSC. Siga principalmente os passos 3, 4 e 6.\n\n• Apenas Habite-se: você já possui Habite-se (ou documento equivalente de conclusão de obras com carimbo do BV) e deseja importar esse documento ao CBMSC, vinculado ao projeto preventivo correspondente. Siga principalmente os passos 3 (para garantir cadastro e bloco), 5 e 6.\n\n• Ambos: você precisa importar tanto o PPCI/RPCI quanto o Habite-se. Nesse caso, siga todos os passos na ordem apresentada."
+          },
+          {
+            titulo: "Garantir cadastro no e-SCI, RE, vínculo e bloco corretamente cadastrados",
+            corpo: "Mesmo sendo uma migração, o e-SCI exige os mesmos pré-requisitos das outras edificações: cadastro do usuário, Registro de Endereço (RE) e vínculo do CPF com o imóvel. Em seguida, acesse MINHAS EDIFICAÇÕES, localize o RE e cadastre o bloco da edificação, preenchendo os campos de ocupação, lotação, número de pavimentos, GLP, líquidos inflamáveis e demais informações conforme IN 01 (ocupações) e IN 09 (lotação)."
+          },
+          {
+            titulo: "Importar o PPCI/RPCI aprovado pelo Bombeiro Voluntário",
+            corpo: "Com o RE e o bloco cadastrados, clique em 'CLIQUE AQUI PARA SOLICITAÇÕES e acompanhamento de protocolos' e acesse 'Solicitação e Protocolos de Análise de PPCI/RPCI'. Inicie uma nova solicitação e, na tela inicial, utilize a opção específica de 'Migração de processo oriundo de Bombeiro Voluntário?'. Selecione a unidade correspondente (por exemplo, CBVJ), escolha o bloco a ser incluído na migração e prossiga. Em edificações até 750 m², o sistema apresenta campo específico para importação do projeto do BV; áreas maiores podem exigir complementação técnica e memorial de cálculo."
+          },
+          {
+            titulo: "Anexar os documentos do projeto CBVJ conforme a área da edificação",
+            corpo: "Na aba de ANEXOS da migração de PPCI/RPCI, anexe os documentos conforme a metragem:\n\n• Até 200 m²: RPCI ou PPCI do CBVJ e, se houver, o atestado do CBVJ.\n• De 200 m² até 750 m²: RPCI ou PPCI do CBVJ, ART(s) com a mesma área do projeto e atestado do CBVJ, quando existir.\n• Acima de 750 m²: RPCI ou PPCI do CBVJ, ART(s) com a mesma área do projeto, memorial de cálculo e atestado do CBVJ, se houver.\n\nConcluída a anexação, finalize a solicitação. O sistema irá gerar um protocolo e uma taxa associada, que, para o caso de importação CBVJ, normalmente não deve ser paga, pois será solicitada isenção específica."
+          },
+          {
+            titulo: "Importar o Habite-se aprovado pelo Bombeiro Voluntário",
+            corpo: "Para importar o Habite-se já aprovado pelo Bombeiro Voluntário (quando existir), tenha em mãos o atestado de aprovação de Habite-se e o número do protocolo do projeto preventivo que será vinculado. Acesse o e-SCI, clique em 'Vistoria para Habite-se' > 'Nova solicitação', selecione o RE correspondente e localize o protocolo do projeto aprovado. Na aba ANEXOS, insira todos os documentos aprovados pelo BV digitalizados: atestado de Habite-se (ou documento equivalente de Conclusão de Obras com carimbo do BV) e documento de responsabilidade técnica da execução. Nos campos obrigatórios em que não exista documento porque não foi exigido na época, anexe o ofício de isenção descrito no passo seguinte."
+          },
+          {
+            titulo: "Solicitar isenção de taxa e acompanhar a liberação da migração",
+            corpo: "Ao final da solicitação de migração (seja de PPCI/RPCI, seja de Habite-se), a taxa gerada no e-SCI normalmente não deve ser quitada. Em vez disso, elabore um ofício solicitando a isenção, indicando os dados da edificação (nome, endereço, área total, altura, etc.), dados do solicitante e, se houver, o número do protocolo do BV. Envie esse ofício para o e-mail indicado pelo CBMSC (por exemplo, 74satcartorio@cbm.sc.gov.br) e anexe o mesmo documento na aba ANEXOS do processo no e-SCI. Depois disso, aguarde a análise e a liberação: uma vez deferida, o projeto e/ou Habite-se do Bombeiro Voluntário passam a constar como importados no sistema do CBMSC."
+          }
+        ]
+      },
+      outros: {
+        nome: "Outros serviços / Dúvidas",
+        descricao: "Situações específicas como exclusão de protocolo, restituição de taxa, cálculo de lotação, prorrogação de AF, recurso, cumprimento de pendência e outras dúvidas pontuais.",
+        taxa: "Pode ou não haver taxa, conforme o caso",
+        dificuldade: "Variável",
+        assessoria: "Em casos específicos, analisamos a situação, avaliamos os documentos que você já possui e, se necessário, orientamos e protocolamos os ajustes adequados no e-SCI (como exclusão de protocolo, pedidos de restituição, prorrogação de prazo, recursos e regularização de lotação).",
+        docs: [
+          "Resumo escrito da situação ou dúvida (o que aconteceu e qual o objetivo)",
+          "Número do protocolo ou do Auto de Fiscalização/Infraçao, quando houver",
+          "Comprovantes de pagamento e boleto gerado, nos casos de restituição/compensação de taxa",
+          "Autos de Fiscalização e de Infração, despachos e notificações já recebidos",
+          "Informações básicas da edificação e da atividade (endereço, CNPJ, responsável)",
+          "Plantas e dados utilizados para cálculo de lotação, quando for o caso"
+        ],
+        passos: [
+          {
+            titulo: "Entender o tipo de demanda (exclusão de protocolo, restituição de taxa, AF, recurso, lotação, etc.)",
+            corpo: "Liste claramente o que você precisa resolver. Exemplos:\n\n• Excluir um protocolo de análise de PPCI/RPCI ainda sem taxa paga.\n• Solicitar restituição ou compensação de taxa paga indevidamente.\n• Prorrogar prazo de um Auto de Fiscalização (AF).\n• Apresentar recurso contra Auto de Infração.\n• Informar cumprimento de pendência registrada em AF.\n• Calcular ou revisar lotação e dimensionamento de saídas de emergência."
+          },
+          {
+            titulo: "Exclusão de protocolo de PPCI/RPCI ainda não pago",
+            corpo: "Quando o protocolo de análise de PPCI/RPCI foi gerado por engano e a taxa ainda não foi paga, é possível pedir a exclusão diretamente no e-SCI. Acesse MINHAS EDIFICAÇÕES, selecione o RE e o bloco desejado, clique em 'SOLICITAÇÕES e acompanhamento de protocolos' > 'Solicitação e Protocolos de Análise de PPCI/RPCI' e utilize a opção 'Excluir Protocolo' para o processo desejado (quando disponível no sistema)."
+          },
+          {
+            titulo: "Restituição de taxa via Autosserviço da Prefeitura",
+            corpo: "Nos casos em que a taxa já foi paga e houver direito à restituição/compensação, reúna os documentos: comprovantes de pagamento, boleto do e-SCI, declaração do CBMSC e, se for por representante, autorização de representação legal. Depois, acesse o Autosserviço da Prefeitura (por exemplo, Joinville), faça login com conta gov.br nível Prata ou Ouro, inicie o processo de restituição de arrecadação, anexe os documentos e acompanhe o andamento e o resultado. Em geral, o parecer é emitido em poucos dias e o depósito em conta ocorre após análise dos dados bancários."
+          },
+          {
+            titulo: "Autos de Fiscalização e Autos de Infração: prorrogação, recurso e cumprimento",
+            corpo: "Para tratar de pendências em AF/AI, utilize o menu MEUS AUTOS DE FISCALIZAÇÃO E DE INFRAÇÃO no e-SCI:\n\n• Prorrogação de prazo de AF: na aba AUTOS DE FISCALIZAÇÃO, acesse o AF desejado, vá em 'INFRAÇÕES E CRONOGRAMA', abra a pendência e clique em 'Solicitar Prorrogação', preenchendo justificativa, anexos e nova data sugerida.\n• Recurso de Infração: na aba AUTOS DE INFRAÇÃO, utilize a seta ao lado do auto para 'Solicitar/Acompanhar recurso', preenchendo todas as abas até ficarem verdes e concluindo o registro.\n• Informar cumprimento da pendência: na aba AUTOS DE FISCALIZAÇÃO, utilize as colunas 'ADICIONAR ANEXOS' e 'INFORMAR CUMPRIMENTO', anexando fotos/documentos comprobatórios e confirmando o cumprimento para análise do CBMSC."
+          },
+          {
+            titulo: "Cálculo de lotação e dimensionamento de saídas de emergência",
+            corpo: "Quando a dúvida estiver relacionada à lotação máxima e às saídas de emergência, consulte a IN específica (como o Anexo B da IN 9, Tabela 7 – dados para dimensionamento da lotação e saídas de emergência) e aplique os coeficientes de densidade populacional por grupo e divisão de ocupação. Utilize as áreas em m² da edificação, o tipo de uso e, se necessário, um responsável técnico para conferir o cálculo, principalmente em ocupações com grande público."
+          }
+        ]
+      }
+    };
+
+    let currentServiceKey = null;
+    let currentStepIndex = 0;
+
+    const tutorialEl = document.getElementById("tutorial");
+    const introEl = document.getElementById("intro");
+    const serviceNameEl = document.getElementById("serviceName");
+    const serviceDescriptionEl = document.getElementById("serviceDescription");
+    const serviceFeeEl = document.getElementById("serviceFee");
+    const serviceDifficultyEl = document.getElementById("serviceDifficulty");
+    const stepTitleEl = document.getElementById("stepTitle");
+    const stepCounterEl = document.getElementById("stepCounter");
+    const stepBodyEl = document.getElementById("stepBody");
+    const progressBarEl = document.getElementById("progressBar");
+    const docsListEl = document.getElementById("docsList");
+    const assistInfoEl = document.getElementById("assistInfo");
+    const prevStepBtn = document.getElementById("prevStepBtn");
+    const nextStepBtn = document.getElementById("nextStepBtn");
+    const assistBtn = document.getElementById("assistBtn");
+    const stepHeaderEl = document.querySelector(".step-header");
+    const progressBarContainerEl = document.querySelector(".progress-bar");
+    const stepActionsEl = document.querySelector(".step-actions");
+
+    function renderOutrosSubcards() {
+      const s = services["outros"];
+      stepTitleEl.textContent = "Serviços disponíveis";
+      stepCounterEl.textContent = "";
+      let html = "";
+      s.passos.forEach((p) => {
+        html += `
+          <div class="sub-card">
+            <div class="sub-card-title">${p.titulo}</div>
+            <div class="sub-card-body">${p.corpo}</div>
+          </div>
+        `;
+      });
+      stepBodyEl.innerHTML = html;
+    }
+
+    function renderService() {
+      if (!currentServiceKey) return;
+      const s = services[currentServiceKey];
+      currentStepIndex = 0;
+
+      tutorialEl.classList.add("visible");
+
+      serviceNameEl.textContent = s.nome;
+      serviceDescriptionEl.textContent = s.descricao;
+      serviceFeeEl.textContent = s.taxa;
+      serviceDifficultyEl.textContent = s.dificuldade;
+      assistInfoEl.textContent = s.assessoria;
+
+      docsListEl.innerHTML = "";
+      s.docs.forEach(doc => {
+        const li = document.createElement("li");
+        li.textContent = doc;
+        docsListEl.appendChild(li);
+      });
+
+      if (currentServiceKey === "outros") {
+        stepHeaderEl.style.display = "flex";
+        progressBarContainerEl.style.display = "none";
+        stepActionsEl.style.display = "none";
+        prevStepBtn.disabled = true;
+        nextStepBtn.disabled = true;
+        renderOutrosSubcards();
+      } else {
+        stepHeaderEl.style.display = "flex";
+        progressBarContainerEl.style.display = "block";
+        stepActionsEl.style.display = "flex";
+        prevStepBtn.disabled = true;
+        nextStepBtn.disabled = false;
+        renderStep();
+      }
+    }
+
+    function renderStep() {
+      if (!currentServiceKey || currentServiceKey === "outros") return;
+      const s = services[currentServiceKey];
+      const total = s.passos.length;
+      const step = s.passos[currentStepIndex];
+
+      stepTitleEl.textContent = step.titulo;
+      stepCounterEl.textContent = `Passo ${currentStepIndex + 1} de ${total}`;
+      stepBodyEl.textContent = step.corpo;
+
+      const progress = ((currentStepIndex + 1) / total) * 100;
+      progressBarEl.style.width = progress + "%";
+
+      prevStepBtn.disabled = currentStepIndex === 0;
+      if (currentStepIndex === total - 1) {
+        nextStepBtn.textContent = "Concluir tutorial";
+      } else {
+        nextStepBtn.textContent = "Próximo passo →";
+      }
+    }
+
+    const cards = document.querySelectorAll(".service-card");
+    cards.forEach(card => {
+      card.addEventListener("click", () => {
+        const key = card.getAttribute("data-service");
+
+        if (currentServiceKey === key) {
+          currentServiceKey = null;
+          cards.forEach(c => c.classList.remove("selected"));
+          tutorialEl.classList.remove("visible");
+          introEl.style.display = "block";
+          return;
+        }
+
+        currentServiceKey = key;
+
+        cards.forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+
+        introEl.style.display = "none";
+        renderService();
+      });
+    });
+
+    prevStepBtn.addEventListener("click", () => {
+      if (!currentServiceKey || currentServiceKey === "outros") return;
+      if (currentStepIndex > 0) {
+        currentStepIndex--;
+        renderStep();
+      }
+    });
+
+    nextStepBtn.addEventListener("click", () => {
+      if (!currentServiceKey || currentServiceKey === "outros") return;
+      const s = services[currentServiceKey];
+      const total = s.passos.length;
+
+      if (currentStepIndex < total - 1) {
+        currentStepIndex++;
+        renderStep();
+      } else {
+        stepBodyEl.textContent = "Você chegou ao fim do passo a passo. Revise as etapas e, se sentir necessidade, utilize a opção de assessoria ao lado ou volte algum passo para conferir.";
+      }
+    });
+
+    // Botão de assessoria – Help Fire
+    assistBtn.addEventListener("click", () => {
+      const msg = encodeURIComponent("Olá! Gostaria de informações sobre assessoria para serviços junto ao CBMSC com a Help Fire.");
+      const whatsappLink = `https://wa.me/5547920035024?text=${msg}`;
+      window.open(whatsappLink, "_blank");
+    });
+  </script>
+</body>
+</html>
